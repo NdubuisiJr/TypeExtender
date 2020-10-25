@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TypeExtender</name>
+    </assembly>
+    <members>
+        <member name="T:TypeExtender.TypeExtender">
+            <summary>
+            A class the creates/extends other unsealed classes/types at runtime
+            </summary>
+        </member>
+        <member name="M:TypeExtender.TypeExtender.#ctor(System.String)">
+            <summary>
+            Initializes a type extender object with the name of the derive class
+            that will extend System.Object as the base class.
+            </summary>
+            <param name="className"></param>
+        </member>
+        <member name="M:TypeExtender.TypeExtender.#ctor(System.String,System.Type)">
+            <summary>
+            Initializes a type extender object with the name of the derived class
+            and the base class the new class should derive from.
+            </summary>
+            <param name="className"></param>
+            <param name="baseType"></param>
+        </member>
+        <member name="M:TypeExtender.TypeExtender.FetchType">
+            <summary>
+            Returns the derived class containing all the properties and methods added to it
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TypeExtender.TypeExtender.AddAttribute``1(System.Object[])">
+            <summary>
+            Adds an attribute to the derived class
+            </summary>
+            <typeparam name="T">Attribute type to add</typeparam>
+        </member>
+        <member name="M:TypeExtender.TypeExtender.AddAttribute(System.Type,System.Object[])">
+            <summary>
+            Adds an attribute to the derived class
+            </summary>
+            <param name="type">Attribute type to add</param>
+            <param name="attributeCtorParams">constructor args for the attribute</param>
+        </member>
+        <member name="P:TypeExtender.TypeExtender.TypeName">
+            <summary>
+            Gets the name of the derived class
+            </summary>
+        </member>
+        <member name="P:TypeExtender.TypeExtender.BaseType">
+            <summary>
+            Gets the base class that the derived class extends
+            </summary>
+        </member>
+    </members>
+</doc>
