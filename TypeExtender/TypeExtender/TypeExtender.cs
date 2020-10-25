@@ -22,8 +22,8 @@ namespace TypeExtender {
         /// <param name="className"></param>
         /// <param name="baseType"></param>
         public TypeExtender(string className, Type baseType) {
-            _baseType = baseType;
-            _className = className.Replace(" ", "_");
+            BaseType = baseType;
+            TypeName = className.Replace(" ", "_");
             initializeTypeConstruction();
         }
 
@@ -37,25 +37,6 @@ namespace TypeExtender {
             }
             return _typeBuilder.CreateTypeInfo()
                                .AsType();
-        }
-
-        private void initializeTypeConstruction() {
-            if (!_baseType.Attributes.HasFlag(TypeAttributes.Public) || _baseType.Attributes.HasFlag(TypeAttributes.Sealed)) {
-                throw new ArgumentException($"{_baseType} is either sealed or not public");
-            }
-
-            if (_typeBuilder != null && _typeBuilder.IsCreated()) {
-                throw new ArgumentException($"The type {_typeBuilder.Name} has already been created. You need to refresh the type extender class or create a new instance.");
-            }
-
-            if (_typeBuilder != null) {
-                return;
-            }
-
-            _assemblyName = new AssemblyName("DynamicAssembly");
-            _assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(_assemblyName, AssemblyBuilderAccess.Run);
-            _moduleBuilder = _assemblyBuilder.DefineDynamicModule(_assemblyName.Name);
-            _typeBuilder = _moduleBuilder.DefineType(_className, TypeAttributes.Public, _baseType);
         }
 
         /// <summary>
@@ -91,18 +72,35 @@ namespace TypeExtender {
             _typeBuilder.SetCustomAttribute(attributeBuilder);
         }
 
+        private void initializeTypeConstruction() {
+            if (!BaseType.Attributes.HasFlag(TypeAttributes.Public) || BaseType.Attributes.HasFlag(TypeAttributes.Sealed)) {
+                throw new ArgumentException($"{BaseType} is either sealed or not public");
+            }
+
+            if (_typeBuilder != null && _typeBuilder.IsCreated()) {
+                throw new ArgumentException($"The type {_typeBuilder.Name} has already been created. You need to refresh the type extender class or create a new instance.");
+            }
+
+            if (_typeBuilder != null) {
+                return;
+            }
+
+            _assemblyName = new AssemblyName("DynamicAssembly");
+            _assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(_assemblyName, AssemblyBuilderAccess.Run);
+            _moduleBuilder = _assemblyBuilder.DefineDynamicModule(_assemblyName.Name);
+            _typeBuilder = _moduleBuilder.DefineType(TypeName, TypeAttributes.Public, BaseType);
+        }
+
         /// <summary>
         /// Gets the name of the derived class
         /// </summary>
-        public string TypeName { get => _className; }
+        public string TypeName { get; }
 
         /// <summary>
         /// Gets the base class that the derived class extends
         /// </summary>
-        public Type BaseType { get => _baseType; }
+        public Type BaseType { get; }
 
-        private string _className;
-        private Type _baseType;
         private TypeBuilder _typeBuilder;
         private AssemblyName _assemblyName;
         private AssemblyBuilder _assemblyBuilder;
