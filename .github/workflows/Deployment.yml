@@ -18,16 +18,16 @@ jobs:
           dotnet-version: 3.1.301
       
       - name: Install dependencies
-        run: dotnet restore ./TypeExtender/TypeExtender.csproj
+        run: dotnet restore ./TypeExtender/TypeExtender/TypeExtender.csproj
     
       - name: Build
-        run: dotnet build ./TypeExtender/TypeExtender.csproj --configuration Release --no-restore
+        run: dotnet build ./TypeExtender/TypeExtender/TypeExtender.csproj --configuration Release --no-restore
        
       - name: Test
-        run: dotnet test TypeExtender/TypeExtender.Test/
+        run: dotnet test ./TypeExtender/TypeExtender.Test/
         
       - name: Publish TypeExtender to nuget
         uses: brandedoutcast/publish-nuget@v2.5.5
         with:
-            PROJECT_FILE_PATH: TypeExtender/TypeExtender.csproj
+            PROJECT_FILE_PATH: TypeExtender/TypeExtender/TypeExtender.csproj
             NUGET_KEY: ${{secrets.NUGET_API_KEY}}
