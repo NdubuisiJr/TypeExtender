@@ -6,7 +6,7 @@ A light-weight (actually contains one class) library that extends any unsealed t
  [![forthebadge](https://forthebadge.com/images/badges/made-with-c-sharp.svg)](https://forthebadge.com)
  
  
- [![GitHub license](https://img.shields.io/github/license/NdubuisiJr/TypeExtender.svg?style=flat-square)](https://github.com/NdubuisiJr/TypeExtender/blob/master/LICENSE)
+ [![GitHub license](https://img.shields.io/github/license/NdubuisiJr/TypeExtender.svg?style=flat-square)](https://github.com/NdubuisiJr/TypeExtender/blob/main/LICENSE)
  [![Actions Status](https://github.com/NdubuisiJr/TypeExtender/workflows/Deployment/badge.svg?style=flat-square)](https://github.com/NdubuisiJr/TypeExtender/actions)
  [![nuget](https://img.shields.io/nuget/v/TypeExtender.svg?style=flat-square)](https://www.nuget.org/packages/TypeExtender/)
 
