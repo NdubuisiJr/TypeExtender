@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-namespace TypeExtender {
+namespace Extender {
     /// <summary>
     /// A class the creates/extends other unsealed classes/types at runtime
     /// </summary>

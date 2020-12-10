@@ -4,19 +4,19 @@
         <name>TypeExtender</name>
     </assembly>
     <members>
-        <member name="T:TypeExtender.TypeExtender">
+        <member name="T:Extender.TypeExtender">
             <summary>
             A class the creates/extends other unsealed classes/types at runtime
             </summary>
         </member>
-        <member name="M:TypeExtender.TypeExtender.#ctor(System.String)">
+        <member name="M:Extender.TypeExtender.#ctor(System.String)">
             <summary>
             Initializes a type extender object with the name of the derive class
             that will extend System.Object as the base class.
             </summary>
             <param name="className"></param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.#ctor(System.String,System.Type)">
+        <member name="M:Extender.TypeExtender.#ctor(System.String,System.Type)">
             <summary>
             Initializes a type extender object with the name of the derived class
             and the base class the new class should derive from.
@@ -24,31 +24,31 @@
             <param name="className"></param>
             <param name="baseType"></param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.FetchType">
+        <member name="M:Extender.TypeExtender.FetchType">
             <summary>
             Returns the derived class containing all the properties and methods added to it
             </summary>
             <returns></returns>
         </member>
-        <member name="M:TypeExtender.TypeExtender.Refresh">
+        <member name="M:Extender.TypeExtender.Refresh">
             <summary>
             Sets the TypeBuilder instance to null to allow a new type creation
             </summary>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddAttribute``1(System.Object[])">
+        <member name="M:Extender.TypeExtender.AddAttribute``1(System.Object[])">
             <summary>
             Adds an attribute to the derived class
             </summary>
             <typeparam name="T">Attribute type to add</typeparam>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddAttribute(System.Type,System.Object[])">
+        <member name="M:Extender.TypeExtender.AddAttribute(System.Type,System.Object[])">
             <summary>
             Adds an attribute to the derived class
             </summary>
             <param name="type">Attribute type to add</param>
             <param name="attributeCtorParams">constructor args for the attribute</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty``1(System.String,System.Boolean)">
+        <member name="M:Extender.TypeExtender.AddProperty``1(System.String,System.Boolean)">
             <summary>
             Adds a property to the class being extended or created
             </summary>
@@ -56,7 +56,7 @@
             <param name="propertyName">Name of the property to be added</param>
             <param name="isReadOnly">Indicates if the property is ReadOnly</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty``2(System.String,System.Object[],System.Boolean)">
+        <member name="M:Extender.TypeExtender.AddProperty``2(System.String,System.Object[],System.Boolean)">
             <summary>
             Adds a property with a custom attribute to the class being extended or created
             </summary>
@@ -66,7 +66,7 @@
             <param name="attributeValues">the parameters of the attribute</param>
             <param name="isReadOnly">Indicates if the property is ReadOnly</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty(System.String,System.Type,System.Boolean)">
+        <member name="M:Extender.TypeExtender.AddProperty(System.String,System.Type,System.Boolean)">
             <summary>
             Adds a property to the class being extended or created
             </summary>
@@ -74,7 +74,7 @@
             <param name="propertyType">Return type of the property</param>
             <param name="isReadOnly">Indicates if the property is ReadOnly</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty(System.String,System.Type,System.Type,System.Object[],System.Boolean)">
+        <member name="M:Extender.TypeExtender.AddProperty(System.String,System.Type,System.Type,System.Object[],System.Boolean)">
             <summary>
             Adds a property to the class being extended or created
             </summary>
@@ -84,21 +84,21 @@
             <param name="attributeValues">The parameters of the attribute</param>
             <param name="isReadOnly">Indicates if the property is ReadOnly</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty``1(System.Collections.Generic.IEnumerable{System.String})">
+        <member name="M:Extender.TypeExtender.AddProperty``1(System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Adds a collection of properties with the same type to the class being extended or created
             </summary>
             <typeparam name="T">The return type of all the properties in the collection</typeparam>
             <param name="propertyNames">A collection that holds the names of the properties to be added</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty(System.Collections.Generic.IEnumerable{System.String},System.Type)">
+        <member name="M:Extender.TypeExtender.AddProperty(System.Collections.Generic.IEnumerable{System.String},System.Type)">
             <summary>
             Adds a collection of properties with the same type to the class being extended or created
             </summary>
             <param name="propertyNames">A collection that holds the names of the properties to be added</param>
             <param name="propertyType">The return type of all the properties in the collection</param>
         </member>
-        <member name="M:TypeExtender.TypeExtender.AddProperty(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.Type},System.Boolean)">
+        <member name="M:Extender.TypeExtender.AddProperty(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.IEnumerable{System.Type},System.Boolean)">
             <summary>
             Adds a collection properties with separate data type to the class being extended or created
             </summary>
@@ -106,12 +106,12 @@
             <param name="types">A collection that holds the types of the properties to be added</param>
             <param name="allReadOnly">A value that indicates if all the properties are readonly properties</param>
         </member>
-        <member name="P:TypeExtender.TypeExtender.TypeName">
+        <member name="P:Extender.TypeExtender.TypeName">
             <summary>
             Gets the name of the derived class
             </summary>
         </member>
-        <member name="P:TypeExtender.TypeExtender.BaseType">
+        <member name="P:Extender.TypeExtender.BaseType">
             <summary>
             Gets the base class that the derived class extends
             </summary>

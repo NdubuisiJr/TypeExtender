@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TypeExtender.Test.TestHelpers;
 
-namespace TypeExtender.Test {
+namespace Extender.Test {
     public class TypeExtenderShould {
         TypeExtender _typeExtender;
 

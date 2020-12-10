@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Extender.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
