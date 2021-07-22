@@ -8,6 +8,7 @@ A light-weight (actually contains one class) library that extends any unsealed t
  
  [![Actions Status](https://github.com/NdubuisiJr/TypeExtender/workflows/Deployment/badge.svg?style=flat-square)](https://github.com/NdubuisiJr/TypeExtender/actions)
  [![nuget](https://img.shields.io/nuget/v/TypeExtender.svg?style=flat-square)](https://www.nuget.org/packages/TypeExtender/)
+ [![Nuget](https://img.shields.io/nuget/dt/TypeExtender?style=flat-square)](https://www.nuget.org/packages/TypeExtender/)
 
 <sub>Built by Ndubuisi Jr Chukuigwe</sub>
 </div><br>
