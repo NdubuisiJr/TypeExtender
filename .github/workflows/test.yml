@@ -1,4 +1,4 @@
-name: typeextender_test
+name: test
 
 on:
   push:
