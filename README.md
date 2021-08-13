@@ -14,6 +14,7 @@ A light-weight (actually contains one class) library that extends any unsealed t
 <sub>Built by Ndubuisi Jr Chukuigwe</sub>
 </div><br>
 
+
 ## Usage
 Simply install nuget package and you are ready to zoom off!
 ### Creating a new class
