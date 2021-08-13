@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,6 +150,62 @@ namespace Extender.Test {
             Assert.AreEqual(1, attributes.Length);
             Assert.NotNull(attribute);
             Assert.AreEqual("Jon Snow", attribute.Name);
+        }
+        
+        [Test]
+        public void AddFieldToDerivedClass() {
+            // Arrange
+            _typeExtender = new TypeExtender("ClassA");
+            _typeExtender.AddField("IsAdded", typeof(bool));
+
+
+            //Act
+            var returnedClass = _typeExtender.FetchType();
+            var isAddedField = returnedClass.GetField("IsAdded");
+
+            //Assert
+            Assert.AreEqual("IsAdded", isAddedField.Name);
+            Assert.AreEqual(typeof(bool), isAddedField.FieldType);
+        }
+        
+        [Test]
+        public void AddFieldWithAttribute() {
+            var attributeType = typeof(CustomAAttribute);
+            var attributeParams = new object[] { "Jon Snow" };
+            _typeExtender = new TypeExtender("ClassA");
+            _typeExtender.AddField("IsAdded", typeof(bool), attributeType, attributeParams);
+
+            var returnedClass = _typeExtender.FetchType();
+            var field = returnedClass.GetField("IsAdded");
+            var attributes = field.GetCustomAttributes(attributeType, false);
+            var attribute = attributes[0] as CustomAAttribute;
+
+            Assert.AreEqual(1, attributes.Length);
+            Assert.NotNull(attribute);
+            Assert.AreEqual("Jon Snow", attribute.Name);
+        }  
+        
+        [Test]
+        public void AddFieldWithAttributes() {
+            _typeExtender = new TypeExtender("ClassA");
+            var attributeTypesAndParameters = new Dictionary<Type, List<object>>
+            {
+                {typeof(CustomAAttribute), new List<object> { "Jon Snow" }},
+                {typeof(CustomCAttribute), new List<object> { "Tyrion Lannister" }},
+            };
+            _typeExtender.AddField("IsAdded", typeof(bool), attributeTypesAndParameters);
+
+            var returnedClass = _typeExtender.FetchType();
+            var field = returnedClass.GetField("IsAdded");
+            var attributes = field.GetCustomAttributes(typeof(CustomAAttribute), false);
+
+            Assert.That(attributes, Has.Length.EqualTo(2));
+            var attributeA = attributes.OfType<CustomAAttribute>().FirstOrDefault() ;
+            var attributeC = attributes.OfType<CustomCAttribute>().FirstOrDefault();
+            Assert.NotNull(attributeA);
+            Assert.That(attributeA, Has.Property("Name").EqualTo("Jon Snow"));
+            Assert.NotNull(attributeC);
+            Assert.That(attributeC, Has.Property("Name").EqualTo("Tyrion Lannister"));
         }
     }
 }

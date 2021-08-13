@@ -12,4 +12,9 @@ namespace TypeExtender.Test.TestHelpers {
 
     public class CustomBAttribute : Attribute {
     }
+    
+    public class CustomCAttribute : CustomAAttribute {
+        public CustomCAttribute(string name): base(name) {
+        }
+    }
 }
