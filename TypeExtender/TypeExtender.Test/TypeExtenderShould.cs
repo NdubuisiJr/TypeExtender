@@ -136,7 +136,7 @@ namespace Extender.Test {
         }
 
         [Test]
-        public void AddPropertyWithAddributes() {
+        public void AddPropertyWithAttribute() {
             var attributeType = typeof(CustomAAttribute);
             var attributeParams = new object[] { "Jon Snow" };
             _typeExtender = new TypeExtender("ClassA");
