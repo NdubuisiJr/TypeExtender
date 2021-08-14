@@ -177,8 +177,8 @@ namespace Extender {
         /// <summary>
         /// Adds a field to the class being extended or created
         /// </summary>
-        /// <param name="fieldName">Name of the property to be added</param>
-        /// <param name="fieldType">Return type of the property</param>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="fieldType">Return type of the field</param>
         public void AddField(string fieldName, Type fieldType) {
             if (string.IsNullOrWhiteSpace(fieldName)) {
                 throw new ArgumentException("fieldName can not be null or empty");
@@ -190,8 +190,8 @@ namespace Extender {
         /// <summary>
         /// Adds a field to the class being extended or created
         /// </summary>
-        /// <param name="fieldName">Name of the property to be added</param>
-        /// <param name="fieldType">Return type of the property</param>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="fieldType">Return type of the field</param>
         /// <param name="attributeType">Type of attribute you want to add to this field</param>
         /// <param name="attributeValues">The parameters of the attribute</param>
         public void AddField(string fieldName, Type fieldType, Type attributeType, object[] attributeValues) {
@@ -204,8 +204,8 @@ namespace Extender {
         /// <summary>
         /// Adds a field to the class being extended or created
         /// </summary>
-        /// <param name="fieldName">Name of the property to be added</param>
-        /// <param name="fieldType">Return type of the property</param>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="fieldType">Return type of the field</param>
         /// <param name="attributeTypesAndParameters">Type of attribute you want to add to this field as key. The parameters of the attribute as values</param>
         public void AddField(string fieldName, Type fieldType, Dictionary<Type, List<object>> attributeTypesAndParameters) {
             if (string.IsNullOrWhiteSpace(fieldName)) {
