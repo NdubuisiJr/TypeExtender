@@ -196,7 +196,9 @@ namespace Extender.Test {
 
             var returnedClass = _typeExtender.FetchType();
             var field = returnedClass.GetField("IsAdded");
-            var attributes = field.GetCustomAttributes(typeof(CustomAAttribute), false);
+            var customAAttributes = field.GetCustomAttributes(typeof(CustomAAttribute), false);
+            var customCAttributes = field.GetCustomAttributes(typeof(CustomCAttribute), false);
+            var attributes = customAAttributes.Concat(customCAttributes).ToArray();
 
             Assert.That(attributes, Has.Length.EqualTo(2));
             var attributeA = attributes.OfType<CustomAAttribute>().FirstOrDefault() ;
