@@ -186,6 +186,19 @@ namespace Extender {
 
             addField(fieldName, fieldType, null, null);
         }   
+                
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <typeparam name="T">Return type of the field</typeparam>
+        /// <param name="fieldName">Name of the field to be added</param>
+        public void AddField<T>(string fieldName) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, typeof(T), null, null);
+        }   
         
         /// <summary>
         /// Adds a field to the class being extended or created
@@ -200,7 +213,23 @@ namespace Extender {
             }
 
             addField(fieldName, fieldType, attributeType, attributeValues);
-        }        
+        }    
+        
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <typeparam name="Tfield">Return type of the field</typeparam>
+        /// <typeparam name="Tattr">Type of the custom Attribute</typeparam>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="attributeValues">The parameters of the attribute</param>
+        public void AddField<Tfield, Tattr>(string fieldName, object[] attributeValues) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, typeof(Tfield), typeof(Tattr), attributeValues);
+        }  
+        
         /// <summary>
         /// Adds a field to the class being extended or created
         /// </summary>

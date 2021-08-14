@@ -157,32 +157,43 @@ namespace Extender.Test {
             // Arrange
             _typeExtender = new TypeExtender("ClassA");
             _typeExtender.AddField("IsAdded", typeof(bool));
-
-
+            _typeExtender.AddField<bool>("IsEnabled");
+            
             //Act
             var returnedClass = _typeExtender.FetchType();
             var isAddedField = returnedClass.GetField("IsAdded");
+            var isEnabledField = returnedClass.GetField("IsEnabled");
 
             //Assert
             Assert.AreEqual("IsAdded", isAddedField.Name);
             Assert.AreEqual(typeof(bool), isAddedField.FieldType);
+            Assert.AreEqual("IsEnabled", isEnabledField.Name);
+            Assert.AreEqual(typeof(bool), isEnabledField.FieldType);
         }
         
         [Test]
         public void AddFieldWithAttribute() {
-            var attributeType = typeof(CustomAAttribute);
-            var attributeParams = new object[] { "Jon Snow" };
+            var attributeType1 = typeof(CustomAAttribute);
+            var attributeParams1 = new object[] { "Jon Snow" };
+            var attributeParams2 = new object[] { "Tyrion Lannister" };
             _typeExtender = new TypeExtender("ClassA");
-            _typeExtender.AddField("IsAdded", typeof(bool), attributeType, attributeParams);
+            _typeExtender.AddField("IsAdded", typeof(bool), attributeType1, attributeParams1);
+            _typeExtender.AddField<bool, CustomCAttribute>("IsEnabled", attributeParams2);
 
             var returnedClass = _typeExtender.FetchType();
-            var field = returnedClass.GetField("IsAdded");
-            var attributes = field.GetCustomAttributes(attributeType, false);
-            var attribute = attributes[0] as CustomAAttribute;
+            var field1 = returnedClass.GetField("IsAdded");
+            var attributes1 = field1.GetCustomAttributes(attributeType1, false);
+            var attribute1 = attributes1[0] as CustomAAttribute;
+            var field2 = returnedClass.GetField("IsEnabled");
+            var attributes2 = field2.GetCustomAttributes(typeof(CustomCAttribute), false);
+            var attribute2 = attributes2[0] as CustomCAttribute;
 
-            Assert.AreEqual(1, attributes.Length);
-            Assert.NotNull(attribute);
-            Assert.AreEqual("Jon Snow", attribute.Name);
+            Assert.AreEqual(1, attributes1.Length);
+            Assert.NotNull(attribute1);
+            Assert.AreEqual("Jon Snow", attribute1.Name); 
+            Assert.AreEqual(1, attributes2.Length);
+            Assert.NotNull(attribute2);
+            Assert.AreEqual("Tyrion Lannister", attribute2.Name);
         }  
         
         [Test]
