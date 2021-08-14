@@ -188,8 +188,7 @@ namespace Extender.Test {
         [Test]
         public void AddFieldWithAttributes() {
             _typeExtender = new TypeExtender("ClassA");
-            var attributeTypesAndParameters = new Dictionary<Type, List<object>>
-            {
+            var attributeTypesAndParameters = new Dictionary<Type, List<object>> {
                 {typeof(CustomAAttribute), new List<object> { "Jon Snow" }},
                 {typeof(CustomCAttribute), new List<object> { "Tyrion Lannister" }},
             };

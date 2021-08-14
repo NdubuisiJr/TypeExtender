@@ -235,46 +235,37 @@ namespace Extender {
             }
         }
 
-        private void addField(string fieldName, Type type, Type attributeType, object[] attributeValues)
-        {
+        private void addField(string fieldName, Type type, Type attributeType, object[] attributeValues) {
             initializeTypeConstruction();
             var field = _typeBuilder.DefineField(fieldName, type, FieldAttributes.Public);
             AddAttributeToField(attributeType, attributeValues, field);
         }
         
-        private void addField(string fieldName, Type type, Dictionary<Type, List<object>> attributeTypesAndParameters)
-        {
+        private void addField(string fieldName, Type type, Dictionary<Type, List<object>> attributeTypesAndParameters) {
             initializeTypeConstruction();
             var field = _typeBuilder.DefineField(fieldName, type, FieldAttributes.Public);
             
-            if (attributeTypesAndParameters == null)
-            {
+            if (attributeTypesAndParameters == null) {
                 return;
             }
 
-            foreach (var typeParametersPair in attributeTypesAndParameters)
-            {
+            foreach (var typeParametersPair in attributeTypesAndParameters) {
                 AddAttributeToField(typeParametersPair.Key, typeParametersPair.Value.ToArray(), field);
             }
         }
 
-        private static void AddAttributeToField(Type attributeType,
-            object[] attributeValues, FieldBuilder field)
-        {
+        private static void AddAttributeToField(Type attributeType, object[] attributeValues, FieldBuilder field) {
             if (attributeType != null)
             {
                 Type[] ctorArgsTypes;
-                if (attributeValues != null)
-                {
+                if (attributeValues != null) {
                     ctorArgsTypes = new Type[attributeValues.Length];
 
-                    for (int index = 0; index < attributeValues.Length; index++)
-                    {
+                    for (int index = 0; index < attributeValues.Length; index++) {
                         ctorArgsTypes[index] = attributeValues[index].GetType();
                     }
                 }
-                else
-                {
+                else {
                     attributeValues = new object[] { };
                     ctorArgsTypes = new Type[] { };
                 }
