@@ -173,6 +173,76 @@ namespace Extender {
                 addProperty(properties.ElementAt(index).Replace(" ","_"), types.ElementAt(index), null, null, allReadOnly);
             }
         }
+        
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="fieldType">Return type of the field</param>
+        public void AddField(string fieldName, Type fieldType) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, fieldType, null, null);
+        }   
+                
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <typeparam name="T">Return type of the field</typeparam>
+        /// <param name="fieldName">Name of the field to be added</param>
+        public void AddField<T>(string fieldName) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, typeof(T), null, null);
+        }   
+        
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="fieldType">Return type of the field</param>
+        /// <param name="attributeType">Type of attribute you want to add to this field</param>
+        /// <param name="attributeValues">The parameters of the attribute</param>
+        public void AddField(string fieldName, Type fieldType, Type attributeType, object[] attributeValues) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, fieldType, attributeType, attributeValues);
+        }    
+        
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <typeparam name="Tfield">Return type of the field</typeparam>
+        /// <typeparam name="Tattr">Type of the custom Attribute</typeparam>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="attributeValues">The parameters of the attribute</param>
+        public void AddField<Tfield, Tattr>(string fieldName, object[] attributeValues) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, typeof(Tfield), typeof(Tattr), attributeValues);
+        }  
+        
+        /// <summary>
+        /// Adds a field to the class being extended or created
+        /// </summary>
+        /// <param name="fieldName">Name of the field to be added</param>
+        /// <param name="fieldType">Return type of the field</param>
+        /// <param name="attributeTypesAndParameters">Type of attribute you want to add to this field as key. The parameters of the attribute as values</param>
+        public void AddField(string fieldName, Type fieldType, Dictionary<Type, List<object>> attributeTypesAndParameters) {
+            if (string.IsNullOrWhiteSpace(fieldName)) {
+                throw new ArgumentException("fieldName can not be null or empty");
+            }
+
+            addField(fieldName, fieldType, attributeTypesAndParameters);
+        }
 
         /// <summary>
         /// Gets the name of the derived class
@@ -191,6 +261,48 @@ namespace Extender {
                 var property = _typeBuilder.DefineProperty(prop, PropertyAttributes.HasDefault, propertyType, null);
                 generateGetter(prop, field, property, propertyType);
                 generateSetter(prop, field, property, propertyType);
+            }
+        }
+
+        private void addField(string fieldName, Type type, Type attributeType, object[] attributeValues) {
+            initializeTypeConstruction();
+            var field = _typeBuilder.DefineField(fieldName, type, FieldAttributes.Public);
+            AddAttributeToField(attributeType, attributeValues, field);
+        }
+        
+        private void addField(string fieldName, Type type, Dictionary<Type, List<object>> attributeTypesAndParameters) {
+            initializeTypeConstruction();
+            var field = _typeBuilder.DefineField(fieldName, type, FieldAttributes.Public);
+            
+            if (attributeTypesAndParameters == null) {
+                return;
+            }
+
+            foreach (var typeParametersPair in attributeTypesAndParameters) {
+                AddAttributeToField(typeParametersPair.Key, typeParametersPair.Value.ToArray(), field);
+            }
+        }
+
+        private static void AddAttributeToField(Type attributeType, object[] attributeValues, FieldBuilder field) {
+            if (attributeType != null)
+            {
+                Type[] ctorArgsTypes;
+                if (attributeValues != null) {
+                    ctorArgsTypes = new Type[attributeValues.Length];
+
+                    for (int index = 0; index < attributeValues.Length; index++) {
+                        ctorArgsTypes[index] = attributeValues[index].GetType();
+                    }
+                }
+                else {
+                    attributeValues = new object[] { };
+                    ctorArgsTypes = new Type[] { };
+                }
+
+                var attrCtorInfo = attributeType.GetConstructor(ctorArgsTypes);
+                var attrBuilder =
+                    new CustomAttributeBuilder(attrCtorInfo, attributeValues);
+                field.SetCustomAttribute(attrBuilder);
             }
         }
 

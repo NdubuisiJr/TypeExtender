@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,7 +136,7 @@ namespace Extender.Test {
         }
 
         [Test]
-        public void AddPropertyWithAddributes() {
+        public void AddPropertyWithAttribute() {
             var attributeType = typeof(CustomAAttribute);
             var attributeParams = new object[] { "Jon Snow" };
             _typeExtender = new TypeExtender("ClassA");
@@ -149,6 +150,74 @@ namespace Extender.Test {
             Assert.AreEqual(1, attributes.Length);
             Assert.NotNull(attribute);
             Assert.AreEqual("Jon Snow", attribute.Name);
+        }
+        
+        [Test]
+        public void AddFieldToDerivedClass() {
+            // Arrange
+            _typeExtender = new TypeExtender("ClassA");
+            _typeExtender.AddField("IsAdded", typeof(bool));
+            _typeExtender.AddField<bool>("IsEnabled");
+            
+            //Act
+            var returnedClass = _typeExtender.FetchType();
+            var isAddedField = returnedClass.GetField("IsAdded");
+            var isEnabledField = returnedClass.GetField("IsEnabled");
+
+            //Assert
+            Assert.AreEqual("IsAdded", isAddedField.Name);
+            Assert.AreEqual(typeof(bool), isAddedField.FieldType);
+            Assert.AreEqual("IsEnabled", isEnabledField.Name);
+            Assert.AreEqual(typeof(bool), isEnabledField.FieldType);
+        }
+        
+        [Test]
+        public void AddFieldWithAttribute() {
+            var attributeType1 = typeof(CustomAAttribute);
+            var attributeParams1 = new object[] { "Jon Snow" };
+            var attributeParams2 = new object[] { "Tyrion Lannister" };
+            _typeExtender = new TypeExtender("ClassA");
+            _typeExtender.AddField("IsAdded", typeof(bool), attributeType1, attributeParams1);
+            _typeExtender.AddField<bool, CustomCAttribute>("IsEnabled", attributeParams2);
+
+            var returnedClass = _typeExtender.FetchType();
+            var field1 = returnedClass.GetField("IsAdded");
+            var attributes1 = field1.GetCustomAttributes(attributeType1, false);
+            var attribute1 = attributes1[0] as CustomAAttribute;
+            var field2 = returnedClass.GetField("IsEnabled");
+            var attributes2 = field2.GetCustomAttributes(typeof(CustomCAttribute), false);
+            var attribute2 = attributes2[0] as CustomCAttribute;
+
+            Assert.AreEqual(1, attributes1.Length);
+            Assert.NotNull(attribute1);
+            Assert.AreEqual("Jon Snow", attribute1.Name); 
+            Assert.AreEqual(1, attributes2.Length);
+            Assert.NotNull(attribute2);
+            Assert.AreEqual("Tyrion Lannister", attribute2.Name);
+        }  
+        
+        [Test]
+        public void AddFieldWithAttributes() {
+            _typeExtender = new TypeExtender("ClassA");
+            var attributeTypesAndParameters = new Dictionary<Type, List<object>> {
+                {typeof(CustomAAttribute), new List<object> { "Jon Snow" }},
+                {typeof(CustomCAttribute), new List<object> { "Tyrion Lannister" }},
+            };
+            _typeExtender.AddField("IsAdded", typeof(bool), attributeTypesAndParameters);
+
+            var returnedClass = _typeExtender.FetchType();
+            var field = returnedClass.GetField("IsAdded");
+            var customAAttributes = field.GetCustomAttributes(typeof(CustomAAttribute), false);
+            var customCAttributes = field.GetCustomAttributes(typeof(CustomCAttribute), false);
+            var attributes = customAAttributes.Concat(customCAttributes).ToArray();
+
+            Assert.That(attributes, Has.Length.EqualTo(2));
+            var attributeA = attributes.OfType<CustomAAttribute>().FirstOrDefault() ;
+            var attributeC = attributes.OfType<CustomCAttribute>().FirstOrDefault();
+            Assert.NotNull(attributeA);
+            Assert.That(attributeA, Has.Property("Name").EqualTo("Jon Snow"));
+            Assert.NotNull(attributeC);
+            Assert.That(attributeC, Has.Property("Name").EqualTo("Tyrion Lannister"));
         }
     }
 }
