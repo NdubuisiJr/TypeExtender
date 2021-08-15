@@ -55,3 +55,11 @@ You can add properties with custom attributes
  var typeExtender = new TypeExtender("ClassA");
  typeExtender.AddProperty("IsAdded", typeof(bool), attributeType, attributeParams);
 ```
+
+### Adding Field to Type
+The AddField method helps add a field to the type you are creating or extending
+```
+  var typeExtender = new TypeExtender("ClassA");
+  typeExtender.AddField("IsAdded", typeof(bool)); // first overload
+  typeExtender.AddField<bool>("IsEnabled"); // second overload
+```
