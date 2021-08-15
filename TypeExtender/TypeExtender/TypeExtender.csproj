@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Ndubuisi Jr Chukuigwe</Authors>
     <Company>NdubuisiJr</Company>
     <Description>A light-weight (actually contains one class :) ) library that extends any unsealed type at runtime.</Description>
@@ -16,11 +16,6 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RootNamespace>Extender</RootNamespace>
   </PropertyGroup>
-
-<!--  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">-->
-<!--    <DocumentationFile>C:\Users\user\Desktop\LocalRepo\TypeExtender\TypeExtender\TypeExtender\TypeExtender.xml</DocumentationFile>-->
-<!--    <OutputPath>bin\Debug\netstandard2.0\</OutputPath>-->
-<!--  </PropertyGroup>-->
 
   <ItemGroup>
     <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
