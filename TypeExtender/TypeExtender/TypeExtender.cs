@@ -89,6 +89,22 @@ namespace Extender {
         public void AddProperty<T>(string propertyName, bool isReadOnly = false) {
             AddProperty(propertyName, typeof(T), isReadOnly);
         }
+		
+		/// <summary>
+        /// Adds a property to the class being extended or created
+        /// </summary>
+        /// <typeparam name="T">Return type of the property</typeparam>
+        /// <param name="propertyName">Name of the property to be added</param>
+        /// <param name="propertyType">Return type of the property</param>
+        /// <param name="attributesWithValues">Tuple with types of attributes and their parameter values</param>
+        /// <param name="isReadOnly">Indicates if the property is ReadOnly</param>
+        public void AddProperty<T>(string propertyName, IEnumerable<Tuple<Type, object[]>> attributesWithValues, bool isReadOnly = false){
+            if (string.IsNullOrWhiteSpace(propertyName)){
+                throw new ArgumentException("propertyName can not be null or empty");
+            }
+
+            addProperty(propertyName, typeof(T), attributesWithValues, isReadOnly);
+        }
 
         /// <summary>
         /// Adds a property with a custom attribute to the class being extended or created
@@ -139,6 +155,22 @@ namespace Extender {
         /// <param name="propertyNames">A collection that holds the names of the properties to be added</param>
         public void AddProperty<T>(IEnumerable<string> propertyNames) {
             AddProperty(propertyNames, typeof(T));
+        }
+		
+		/// <summary>
+        /// Adds a property to the class being extended or created
+        /// </summary>
+        /// <param name="propertyName">Name of the property to be added</param>
+        /// <param name="propertyType">Return type of the property</param>
+        /// <param name="attributesWithValues">Tuple with types of attributes and their parameter values</param>
+        /// <param name="isReadOnly">Indicates if the property is ReadOnly</param>
+        public void AddProperty(string propertyName, Type propertyType,
+            IEnumerable<Tuple<Type, object[]>> attributesWithValues, bool isReadOnly = false){
+            if (string.IsNullOrWhiteSpace(propertyName)){
+                throw new ArgumentException("propertyName can not be null or empty");
+            }
+
+            addProperty(propertyName, propertyType, attributesWithValues, isReadOnly);
         }
 
         /// <summary>
@@ -306,20 +338,36 @@ namespace Extender {
             }
         }
 
-        private void addProperty(string propertyName, Type type, Type attributeType, object[] attributeValues, bool isReadOnly) {
+        private void addProperty(string propertyName, Type type, Type attributeType, object[] attributeValues, bool isReadOnly){
+            addProperty(propertyName, type, new[] {new Tuple<Type, object[]>(attributeType, attributeValues)}, isReadOnly);
+        }
+
+        private void addProperty(string propertyName, Type type, IEnumerable<Tuple<Type, object[]>> attributeTypesWithValues, bool isReadOnly){
             initializeTypeConstruction();
             var field = _typeBuilder.DefineField($"_{propertyName}", type, FieldAttributes.Private);
             var propertyBuilder = _typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, type, null);
-            if (attributeType != null) {
+            foreach (var attributeTypesWithValue in attributeTypesWithValues){
+                addAttributeToProperty(attributeTypesWithValue.Item1, attributeTypesWithValue.Item2, propertyBuilder);
+            }
+
+            generateGetter(propertyName, field, propertyBuilder, type);
+
+            if (!isReadOnly){
+                generateSetter(propertyName, field, propertyBuilder, type);
+            }
+        }
+
+        private void addAttributeToProperty(Type attributeType, object[] attributeValues, PropertyBuilder propertyBuilder){
+            if (attributeType != null){
                 Type[] ctorArgsTypes;
-                if (attributeValues != null) {
+                if (attributeValues != null){
                     ctorArgsTypes = new Type[attributeValues.Length];
 
-                    for (int index = 0; index < attributeValues.Length; index++) {
+                    for (var index = 0; index < attributeValues.Length; index++){
                         ctorArgsTypes[index] = attributeValues[index].GetType();
                     }
                 }
-                else {
+                else{
                     attributeValues = new object[] { };
                     ctorArgsTypes = new Type[] { };
                 }
@@ -327,12 +375,6 @@ namespace Extender {
                 var attrCtorInfo = attributeType.GetConstructor(ctorArgsTypes);
                 var attrBuilder = new CustomAttributeBuilder(attrCtorInfo, attributeValues);
                 propertyBuilder.SetCustomAttribute(attrBuilder);
-            }
-
-            generateGetter(propertyName, field, propertyBuilder, type);
-
-            if (!isReadOnly) {
-                generateSetter(propertyName, field, propertyBuilder, type);
             }
         }
 

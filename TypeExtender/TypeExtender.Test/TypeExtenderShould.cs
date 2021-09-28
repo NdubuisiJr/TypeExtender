@@ -151,6 +151,35 @@ namespace Extender.Test {
             Assert.NotNull(attribute);
             Assert.AreEqual("Jon Snow", attribute.Name);
         }
+
+        [Test]
+        public void AddPropertyWithMultipleAttributes(){
+            var attributeTypeA = typeof(CustomAAttribute);
+            var attributeParamsA = new object[] {"Jon Snow"};
+            var attributeTypeB = typeof(CustomBAttribute);
+            _typeExtender = new TypeExtender("ClassA");
+            var attributesWithValues = new[]{
+                new Tuple<Type, object[]>(attributeTypeA, attributeParamsA),
+                new Tuple<Type, object[]>(attributeTypeB, new object[] { })
+            };
+            _typeExtender.AddProperty("IsAdded", typeof(bool), attributesWithValues);
+
+            var returnedClass = _typeExtender.FetchType();
+            var property = returnedClass.GetProperty("IsAdded");
+
+            var attributesOfTypA = property.GetCustomAttributes(attributeTypeA, false);
+            var attributeA = attributesOfTypA[0] as CustomAAttribute;
+
+            Assert.AreEqual(1, attributesOfTypA.Length);
+            Assert.NotNull(attributeA);
+            Assert.AreEqual("Jon Snow", attributeA.Name);
+
+            var attributesOfTypB = property.GetCustomAttributes(attributeTypeB, false);
+            var attributeB = attributesOfTypB[0] as CustomBAttribute;
+
+            Assert.AreEqual(1, attributesOfTypB.Length);
+            Assert.NotNull(attributeB);
+        }
         
         [Test]
         public void AddFieldToDerivedClass() {
