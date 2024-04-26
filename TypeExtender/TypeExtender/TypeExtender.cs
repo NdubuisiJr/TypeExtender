@@ -398,7 +398,7 @@ namespace Extender {
         }
 
         private void initializeTypeConstruction() {
-            if (!BaseType.Attributes.HasFlag(TypeAttributes.Public) || BaseType.Attributes.HasFlag(TypeAttributes.Sealed)) {
+            if (BaseType.Attributes.HasFlag(TypeAttributes.Sealed) || !BaseType.Attributes.HasFlag(TypeAttributes.Public) && !BaseType.Attributes.HasFlag(TypeAttributes.NestedPublic)) {
                 throw new ArgumentException($"{BaseType} is either sealed or not public");
             }
 

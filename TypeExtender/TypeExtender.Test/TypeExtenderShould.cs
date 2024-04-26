@@ -277,5 +277,34 @@ namespace Extender.Test {
             Assert.NotNull(attributeC);
             Assert.That(attributeC, Has.Property("Name").EqualTo("Tyrion Lannister"));
         }
+
+        [Test]
+        public void ThrowWhenBaseTypeIsNotPublic()
+        {
+            Assert.Throws<ArgumentException>(() => new TypeExtender("ClassA", typeof(TestInternalClass)));
+        }
+
+        [Test]
+        public void ThrowWhenBaseTypeIsSealed()
+        {
+            Assert.Throws<ArgumentException>(() => new TypeExtender("ClassA", typeof(TestSealedClass)));
+        }
+
+        [Test]
+        public void SucceedWhenInstantiatingNestedPublicClass()
+        {
+            _typeExtender = new TypeExtender("ClassA", typeof(TestNestedPublicClass));
+            var returnedClass = _typeExtender.FetchType();
+
+            var instance = Activator.CreateInstance(returnedClass);
+
+            Assert.IsNotNull(instance);
+        }
+
+        public class TestNestedPublicClass { }
     }
+
+    internal class TestInternalClass { }
+
+    public sealed class TestSealedClass { }
 }
